@@ -10,6 +10,7 @@ dependencies = [
     "langchain-openai",
     "langserve[all]",
     "python-dotenv",
+    "uvicorn[all,standard]>=0.37.0",
 ]
 
 [dependency-groups]
