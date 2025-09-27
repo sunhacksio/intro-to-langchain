@@ -41,7 +41,9 @@ def date_time(date_time_choice: DateTimeChoice):
 def date_time_agent(date_time_choice: DateTimeChoice):
     prompt = ChatPromptTemplate.from_messages(
         [
-            SystemMessage("You are a helpful assistant. Using the date_time tool, answer the question below, providing the answer in the format requested."),
+            SystemMessage(
+                "You are a helpful assistant. Using the date_time tool, answer the question below, providing the answer in the format requested."
+            ),
             ("user", "{input}"),
             MessagesPlaceholder(variable_name="agent_scratchpad"),
         ]
