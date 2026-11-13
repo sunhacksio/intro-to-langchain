@@ -1,20 +1,19 @@
 [project]
 name = "intro-to-langchain"
 version = "0.1.0"
-description = "Add your description here"
+description = "Intro to LangChain and Agents Workshop at sunhacks"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.12"
 dependencies = [
     "langchain",
     "langchain-core",
     "langchain-openai",
-    "langserve[all]",
+    "langgraph-cli[inmem]",
     "python-dotenv",
-    "uvicorn[all,standard]>=0.37.0",
 ]
 
 [dependency-groups]
 dev = [
-    "langchain-cli>=0.0.37",
-    "ruff>=0.13.2",
+    "pyrefly",
+    "ruff",
 ]

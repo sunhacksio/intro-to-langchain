@@ -1,0 +1,10 @@
+{
+  "$schema": "https://langgra.ph/schema.json",
+  "python_version": "3.12",
+  "graphs": {
+    "chat": "./src/intro_to_langchain/question_answer.py:graph"
+  },
+  "source": {
+    "kind": "uv"
+  }
+}
