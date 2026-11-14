@@ -1,39 +1,44 @@
 from langchain.agents import create_agent
-from langchain_core.tools import BaseTool, tool
 from langchain_core.stores import InMemoryStore
+from langchain_core.tools import BaseTool, tool
+
 from src.intro_to_langchain.llms import llm
 
 
 class MemoryTools:
-    def __init__(self):
-        self.store = InMemoryStore()
+    def __init__(self, store: InMemoryStore | None = None):
+        self.store = store if store is not None else InMemoryStore()
+
+    def create_memory(self, memories: dict[str, str]) -> list[str]:
+        """Save memories mapped by short descriptive keys."""
+        self.store.mset(list(memories.items()))
+        return list(self.store.yield_keys())
+
+    def read_memory(self, keys: list[str]) -> list[str | None]:
+        """Read memories by keys, run list_memories first to see all memories."""
+        return self.store.mget(keys)
+
+    def list_memories(self) -> list[str]:
+        """List all stored memories, run this first to see all memories."""
+        return list(self.store.yield_keys())
+
+    def delete_memory(self, keys: list[str]) -> list[str]:
+        """Delete memories by keys."""
+        self.store.mdelete(keys)
+        return keys
 
     def get(self) -> list[BaseTool]:
-        """Return the tools, each bound to this instance's store."""
-        store = self.store
+        """Return the class-scoped tools, bound to this instance's store.
 
-        @tool
-        def create_memory(memories: dict[str, str]) -> list[str]:
-            """Save memories. `memories` maps a short descriptive key
-            (for example "user_birthday") to the value to remember.
-            Returns every key currently stored."""
-            store.mset(list(memories.items()))
-            return list(store.yield_keys())
-
-        @tool
-        def read_memory(keys: list[str]) -> list[str | None]:
-            """Read the memories stored under `keys`. Returns one value per
-            key, or null for a key that has no memory."""
-            return store.mget(keys)
-
-        @tool
-        def delete_memory(keys: list[str]) -> list[str]:
-            """Delete the memories stored under `keys`. Returns the keys
-            that were deleted."""
-            store.mdelete(keys)
-            return keys
-
-        return [create_memory, read_memory, delete_memory]
+        `self.create_memory` is a bound method, so `self` is already
+        bound and `tool(...)` only sees the real tool arguments.
+        """
+        return [
+            tool(self.create_memory),
+            tool(self.read_memory),
+            tool(self.list_memories),
+            tool(self.delete_memory),
+        ]
 
 
 memory_agent = create_agent(

@@ -1,24 +1,22 @@
-from datetime import timezone
-from datetime import datetime
-from langchain_core.tools import tool
+from datetime import UTC, datetime
 from enum import Enum
 from typing import TypedDict
-from langchain_core.messages import HumanMessage
+
 from langchain.agents import create_agent
-from langgraph.graph import StateGraph, MessagesState, START, END
+from langchain_core.messages import HumanMessage
+from langchain_core.tools import tool
+from langgraph.graph import END, START, MessagesState, StateGraph
 
 from src.intro_to_langchain.llms import llm
+
 
 @tool
 def date_time() -> datetime:
     """
-    Returns the current datetime in python.
-    Parameters: None
+    Return the current UTC datetime.
     """
 
-    return datetime.now(timezone.utc)
-
-
+    return datetime.now(UTC)
 
 
 class DateTimeChoice(str, Enum):
